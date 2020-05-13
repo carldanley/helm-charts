@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "deluge.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.service.http.port }}
+    targetPort: http
+  - name: daemon
+    port: {{ .Values.service.daemon.port }}
+    targetPort: daemon
+  - name: incoming-tcp
+    port: {{ .Values.service.incomingTCP.port }}
+    targetPort: incoming-tcp
+    protocol: TCP
+  - name: incoming-udp
+    port: {{ .Values.service.incomingUDP.port }}
+    targetPort: incoming-udp
+    protocol: UDP
+  selector:
+    {{- include "deluge.selectorLabels" . | nindent 4 }}

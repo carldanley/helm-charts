@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "deluge.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "deluge.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "deluge.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled -}}
+        backup.velero.io/backup-volumes: deluge-config
+        {{- end }}
+    spec:
+      containers:
+      - name: deluge
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.http.port }}
+        - name: daemon
+          containerPort: {{ .Values.service.daemon.port }}
+        - name: incoming-tcp
+          containerPort: {{ .Values.service.incomingTCP.port }}
+          protocol: TCP
+        - name: incoming-udp
+          containerPort: {{ .Values.service.incomingUDP.port }}
+          protocol: UDP
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: deluge-config
+          mountPath: /config
+          readOnly: false
+        - name: plex-downloads
+          mountPath: /downloads
+          readOnly: false
+      volumes:
+      - name: plex-downloads
+      {{- if .Values.downloadVolume }}
+{{ toYaml .Values.downloadVolume | indent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: deluge-config
+        persistentVolumeClaim:
+          claimName: deluge
