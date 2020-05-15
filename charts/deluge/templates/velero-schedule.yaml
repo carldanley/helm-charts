@@ -11,7 +11,7 @@ spec:
   template:
     ttl: {{ .Values.persistence.veleroSchedule.ttl | quote }}
     includedNamespaces:
-    {{- toYaml .Values.persistence.veleroSchedule.includedNamespaces | indent 4 }}
+    {{- toYaml .Values.persistence.veleroSchedule.includedNamespaces | trim | nindent 4 }}
     labelSelector:
       matchLabels:
         {{- include "deluge.selectorLabels" . | nindent 8 }}
