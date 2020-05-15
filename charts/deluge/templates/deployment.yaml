@@ -18,7 +18,7 @@ spec:
       labels:
         {{- include "deluge.labels" . | nindent 8 }}
       annotations:
-        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled -}}
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
         backup.velero.io/backup-volumes: deluge-config
         {{- end }}
     spec:
