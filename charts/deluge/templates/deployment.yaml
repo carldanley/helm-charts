@@ -22,6 +22,16 @@ spec:
         backup.velero.io/backup-volumes: deluge-config
         {{- end }}
     spec:
+      initContainers:
+      - name: copy-configs
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/config-files/copy-files.sh"]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: config-files
+          mountPath: /config-files
       containers:
       - name: deluge
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -47,14 +57,14 @@ spec:
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
         volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: false
         - name: deluge-state
           mountPath: /config/state
           readOnly: false
         - name: plex-downloads
           mountPath: /downloads
-          readOnly: false
-        - name: config-files
-          mountPath: /config
           readOnly: false
       volumes:
       - name: plex-downloads
@@ -63,6 +73,8 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
+      - name: config
+        emptyDir: {}
       - name: deluge-state
         persistentVolumeClaim:
           claimName: deluge

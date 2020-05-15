@@ -6,6 +6,11 @@ metadata:
   labels:
     {{- include "deluge.labels" . | nindent 4 }}
 data:
+  copy-files.sh: |
+    #!/usr/bin/env sh
+    set -x
+    cp -R /config-files/. /config
+
   web.conf: |
     {
       "file": 2,
