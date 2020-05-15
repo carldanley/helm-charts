@@ -3,6 +3,36 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
+config:
+  maxActiveDownloading: 3
+  maxActiveLimit: 8
+  maxActiveSeeding: 5
+  maxConnectionsGlobal: 200
+  maxConnectionsPerSecond: 20
+  maxConnectionsPerTorrent: -1
+  maxDownloadSpeed: -1.0
+  maxDownloadSpeedPerTorrent: -1
+  maxHalfOpenConnections: 50
+  maxUploadSlotsGlobal: 4
+  maxUploadSlotsPerTorrent: -1
+  maxUploadSpeed: -1.0
+  maxUploadSpeedPerTorrent: -1
+  moveCompleted: false
+  queueNewToTop: false
+  proxy:
+    anonymousMode: false
+    forceProxy: false
+    hostName: ""
+    port: 8080
+    username: ""
+    password: ""
+    proxyHostNames: true
+    proxyPeerConnections: true
+    proxyTrackerConnections: true
+    type: 0
+  sidebar:
+    show: true
+
 downloadVolume: {}
   # nfs:
   #   server: 1.1.1.1
@@ -18,7 +48,7 @@ persistence:
   accessModes:
   - ReadWriteOnce
   storageClassName: default
-  size: 100Mi
+  size: 10Mi
   veleroSchedule:
     enabled: true
     schedule: "0 */6 * * *"

@@ -47,11 +47,14 @@ spec:
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
         volumeMounts:
-        - name: deluge-config
-          mountPath: /config
+        - name: deluge-state
+          mountPath: /config/state
           readOnly: false
         - name: plex-downloads
           mountPath: /downloads
+          readOnly: false
+        - name: config-files
+          mountPath: /config
           readOnly: false
       volumes:
       - name: plex-downloads
@@ -60,6 +63,18 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-      - name: deluge-config
+      - name: deluge-state
         persistentVolumeClaim:
           claimName: deluge
+      - name: config-files
+        configMap:
+          name: {{ .Release.Name }}
+          items:
+          - key: web.conf
+            path: web.conf
+          - key: core.conf
+            path: core.conf
+          - key: auth
+            path: auth
+          - key: hostlist.conf
+            path: hostlist.conf
