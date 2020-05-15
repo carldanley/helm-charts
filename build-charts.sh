@@ -1,11 +1,14 @@
 #!/bin/sh -x
 
-package_chart() {
-  helm package "./charts/${1}" -d ./charts-output
+package_charts() {
+  for path in ./charts/* ; do
+    helm package ${path} -d ./charts-output
+  done
 }
 
-# build all of the helm charts
-package_chart deluge
+generate_helm_index() {
+  helm repo index ./charts-output
+}
 
-# generate the index yaml
-helm repo index ./charts-output
+package_charts
+generate_helm_index
