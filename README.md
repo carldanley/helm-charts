@@ -1,4 +1,3 @@
-```
-helm package ./deluge/ -d ./charts
-helm repo index ./charts
-```
+# helm-charts
+
+> A repository of helm charts that probably, most-likely, eventually fall out of date...
