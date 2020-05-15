@@ -115,7 +115,7 @@ data:
             "type": {{ .Values.config.proxy.type }},
             "username": {{ .Values.config.proxy.username | quote }}
         },
-        "queue_new_to_top": {{ .Values.config.sidebar.queueNewToTop }},
+        "queue_new_to_top": {{ .Values.config.queueNewToTop }},
         "random_outgoing_ports": true,
         "random_port": true,
         "rate_limit_ip_overhead": true,

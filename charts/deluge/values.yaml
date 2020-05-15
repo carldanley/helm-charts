@@ -22,7 +22,7 @@ config:
   proxy:
     anonymousMode: false
     forceProxy: false
-    hostName: ""
+    hostname: ""
     port: 8080
     username: ""
     password: ""
