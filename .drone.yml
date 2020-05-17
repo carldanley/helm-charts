@@ -18,8 +18,8 @@ steps:
   - apk add curl bash openssl
   - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
   - chmod 700 get_helm.sh
-  - ./get_helm.sh
-  - ./lint-charts.sh
+  - sh ./get_helm.sh
+  - sh ./lint-charts.sh
 
 - name: testing
   image: alpine
