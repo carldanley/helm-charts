@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: drone
 description: A helm chart for installing drone
 type: application

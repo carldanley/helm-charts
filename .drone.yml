@@ -1,0 +1,27 @@
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+volumes:
+- name: charts
+  temp: {}
+
+steps:
+- name: lint
+  image: alpine
+  commands:
+  - apk update
+  - apk add curl bash openssl
+  - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+  - chmod 700 get_helm.sh
+  - ./get_helm.sh
+  - ./lint-charts.sh
+
+- name: testing
+  image: alpine
+  commands:
+  - helm version
