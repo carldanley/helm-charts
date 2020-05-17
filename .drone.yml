@@ -31,10 +31,17 @@ steps:
   - name: charts
     path: /charts
 
-- name: testing
-  image: alpine
+- name: deploy
+  image: amazon/aws-cli
+  environment:
+    AWS_DEFAULT_REGION:
+      from_secret: aws-default-region
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws-access-key-id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws-secret-access-key
   commands:
-  - ls -la /charts
+  - aws s3 cp /charts/ s3://helm.carldanley.com/ --recursive
   volumes:
   - name: charts
     path: /charts
