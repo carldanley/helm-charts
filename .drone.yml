@@ -2,6 +2,9 @@ kind: pipeline
 type: docker
 name: default
 
+workspace:
+  base: /helm-charts
+
 platform:
   os: linux
   arch: amd64
@@ -12,16 +15,26 @@ volumes:
 
 steps:
 - name: lint
-  image: alpine
+  image: alpine/helm:latest
   commands:
-  - apk update
-  - apk add curl bash openssl
-  - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-  - chmod 700 get_helm.sh
-  - sh ./get_helm.sh
+  - helm version
   - sh ./lint-charts.sh
+
+- name: build
+  image: alpine/helm:latest
+  environment:
+    OUTPUT_DIRECTORY: /charts
+  commands:
+  - helm version
+  - sh ./build-charts.sh
+  volumes:
+  - name: charts
+    path: /charts
 
 - name: testing
   image: alpine
   commands:
-  - helm version
+  - ls -la /charts
+  volumes:
+  - name: charts
+    path: /charts
