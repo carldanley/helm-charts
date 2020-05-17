@@ -22,8 +22,8 @@ spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
       - name: server
-        image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
-        imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+        image: "{{ .Values.drone.server.image.repository }}:{{ .Values.drone.server.image.tag }}"
+        imagePullPolicy: {{ .Values.drone.server.image.pullPolicy }}
         env:
         - name: DRONE_RPC_SECRET
           valueFrom:
