@@ -36,7 +36,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        {{- if .Values.drone.agent.debug -}}
+        {{- if .Values.drone.agent.debug }}
         - name: DRONE_DEBUG
           value: "true"
         {{- end }}
