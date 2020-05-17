@@ -64,7 +64,7 @@ spec:
           containerPort: {{ .Values.service.http.port }}
           protocol: TCP
         - name: https
-        containerPort: {{ .Values.service.https.port }}
+          containerPort: {{ .Values.service.https.port }}
           protocol: TCP
         livenessProbe:
           httpGet:
