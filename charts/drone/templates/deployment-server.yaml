@@ -34,7 +34,7 @@ spec:
           value: {{ .Values.drone.server.host | quote }}
         - name: DRONE_SERVER_PROTO
           value: {{ .Values.drone.server.protocol | quote }}
-        {{- if .Values.drone.server.debug -}}
+        {{- if .Values.drone.server.debug }}
         - name: DRONE_DEBUG
           value: "true"
         {{- end }}
