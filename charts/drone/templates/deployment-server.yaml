@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "drone.server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.drone.server.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "drone.server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "drone.server.labels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+      - name: server
+        image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+        imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+        env:
+        - name: DRONE_RPC_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: secret
+        - name: DRONE_SERVER_HOST
+          value: {{ .Values.drone.server.host | quote }}
+        - name: DRONE_SERVER_PROTO
+          value: {{ .Values.drone.server.protocol | quote }}
+        {{- if .Values.drone.server.debug -}}
+        - name: DRONE_DEBUG
+          value: "true"
+        {{- end }}
+        - name: DRONE_DATABASE_DRIVER
+          value: {{ .Values.drone.server.database.driver | quote }}
+        - name: DRONE_DATABASE_DATASOURCE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: database-datasource
+        - name: DRONE_GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: github-client-id
+        - name: DRONE_GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: github-client-secret
+        - name: DRONE_USER_CREATE
+          value: {{ .Values.drone.server.createUser | quote }}
+        - name: DRONE_USER_FILTER
+          value: {{ .Values.drone.server.userFilter | quote }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.http.port }}
+          protocol: TCP
+        - name: https
+        containerPort: {{ .Values.service.https.port }}
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/drone
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}

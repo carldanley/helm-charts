@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $servicePort := .Values.service.http.port -}}
+{{- $servicePort := .Values.service.mysql.port -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "deluge.labels" . | nindent 4 }}
+    {{- include "drone.server.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

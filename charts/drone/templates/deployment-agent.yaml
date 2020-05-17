@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-agent
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "drone.agent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.drone.agent.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "drone.agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "drone.agent.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+      - name: agent
+        image: "{{ .Values.drone.agent.image.repository }}:{{ .Values.drone.agent.image.tag }}"
+        imagePullPolicy: {{ .Values.drone.agent.image.pullPolicy }}
+        env:
+        - name: DRONE_RPC_HOST
+          value: {{ .Release.Name }}
+        - name: DRONE_RPC_PORT
+          value: "http"
+        - name: DRONE_RPC_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}
+              key: secret
+        - name: DRONE_RUNNER_CAPACITY
+          value: {{ .Values.drone.agent.runner.capacity | quote }}
+        - name: DRONE_RUNNER_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        {{- if .Values.drone.agent.debug -}}
+        - name: DRONE_DEBUG
+          value: "true"
+        {{- end }}
+        volumeMounts:
+        - name: docker-socket
+          mountPath: "/var/run/docker.sock"
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: {{ .Values.drone.agent.dockerSocket | quote }}
