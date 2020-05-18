@@ -31,7 +31,7 @@ spec:
       {{- range .paths }}
       - path: {{ . }}
         backend:
-          serviceName: {{ $releaseName }}
+          serviceName: {{ $releaseName }}-diskstation-manager
           servicePort: {{ $servicePort }}
       {{- end }}
   {{- end }}
