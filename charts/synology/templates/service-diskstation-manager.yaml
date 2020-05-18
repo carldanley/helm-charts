@@ -1,0 +1,29 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-diskstation-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "diskstationManager.labels" . | nindent 4 }}
+subsets:
+- addresses:
+  - ip: {{ .Values.synologyIP | quote }}
+  ports:
+  - port: {{ .Values.diskstationManager.service.dsm.port }}
+    name: dsm
+    protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-diskstation-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "diskstationManager.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.diskstationManager.service.type }}
+  ports:
+  - port: {{ .Values.diskstationManager.service.dsm.port }}
+    name: dsm
+    protocol: TCP
