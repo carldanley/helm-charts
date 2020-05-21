@@ -10,7 +10,7 @@ config:
   instanceID: "replace-me"
   blackholeDir: ""
   updateDisabled: false
-  updatePrelease: false
+  updatePrerelease: false
   basePathOverride: ""
   omdb:
     apiKey: ""
