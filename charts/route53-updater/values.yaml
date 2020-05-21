@@ -1,0 +1,27 @@
+config:
+  aws:
+    region: "us-east-1"
+    accessKeyID: ""
+    secretAccessKey: ""
+    token: ""
+
+  settings:
+    updateIntervalSeconds: 5
+
+  zones: []
+  # ZONEIDGOESHERE:
+  # - "domain.com"
+  # - "*.domain.com"
+
+image:
+  repository: carldanley/route53-updater
+  pullPolicy: IfNotPresent
+  tag: "1"
+
+resources: {}
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi

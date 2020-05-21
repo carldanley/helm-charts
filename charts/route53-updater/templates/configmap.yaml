@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "route53-updater.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    {{ .Values.config | toYaml | trimSuffix "\n" | indent 4 }}

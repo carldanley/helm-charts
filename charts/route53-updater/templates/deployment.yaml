@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "route53-updater.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "route53-updater.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "route53-updater.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: route53-updater
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: CONFIG_FILE
+          value: "/route53-updater/config.yaml"
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: configs
+          mountPath: /route53-updater
+      volumes:
+      - name: configs
+        configMap:
+          name: {{ .Release.Name }}
