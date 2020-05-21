@@ -28,6 +28,15 @@ spec:
           mountPath: /config
         - name: config-files
           mountPath: /config-files
+      - name: copy-indexers
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/indexer-files/copy-files.sh"]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: indexer-files
+          mountPath: /indexer-files
       containers:
       - name: jackett
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -62,4 +71,7 @@ spec:
         emptyDir: {}
       - name: config-files
         configMap:
-          name: {{ .Release.Name }}
+          name: {{ .Release.Name }}-configs
+      - name: indexer-files
+        configMap:
+          name: {{ .Release.Name }}-indexers
