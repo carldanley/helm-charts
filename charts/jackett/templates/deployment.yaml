@@ -46,7 +46,7 @@ spec:
           {{- toYaml .Values.resources | trim | nindent 10 }}
         volumeMounts:
         - name: config
-          mountPath: /config
+          mountPath: /config/Jackett
           readOnly: false
         - name: plex-downloads
           mountPath: /downloads
