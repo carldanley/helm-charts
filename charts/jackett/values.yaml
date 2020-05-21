@@ -3,6 +3,26 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
+config:
+  allowExternal: true
+  apiKey: "replace-me"
+  adminPassword: ""
+  instanceID: "replace-me"
+  blackholeDir: ""
+  updateDisabled: false
+  updatePrelease: false
+  basePathOverride: ""
+  omdb:
+    apiKey: ""
+    apiUrl: ""
+  proxy:
+    url: ""
+    type: 0
+    port: 0
+    username: ""
+    password: ""
+    isAnonymous: true
+
 downloadVolume: {}
   # nfs:
   #   server: 1.1.1.1
