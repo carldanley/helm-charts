@@ -7,4 +7,4 @@ metadata:
     {{- include "route53-updater.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    {{ .Values.config | toYaml | trimSuffix "\n" | indent 4 }}
+    {{- .Values.config | toYaml | trimSuffix "\n" | nindent 4 }}
