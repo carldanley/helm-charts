@@ -73,7 +73,7 @@ spec:
       {{- end }}
       - name: config
         emptyDir: {}
-      - name: config-file
+      - name: config-files
         configMap:
           name: {{ .Release.Name }}
 
