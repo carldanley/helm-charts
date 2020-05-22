@@ -21,18 +21,6 @@ image:
   pullPolicy: IfNotPresent
   tag: latest
 
-persistence:
-  enabled: false
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: default
-  size: 10Mi
-  veleroSchedule:
-    enabled: true
-    schedule: "0 */6 * * *"
-    ttl: "168h"
-    includedNamespaces: []
-
 service:
   type: ClusterIP
   http:
