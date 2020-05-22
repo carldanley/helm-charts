@@ -22,6 +22,7 @@ config:
     username: ""
     password: ""
     isAnonymous: true
+  indexers: {}
 
 downloadVolume: {}
   # nfs:
@@ -71,5 +72,3 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-indexers: {}

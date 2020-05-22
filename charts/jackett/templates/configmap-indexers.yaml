@@ -12,6 +12,6 @@ data:
     mkdir /config/Indexers
     cp -R /indexer-files/. /config/Indexers
 
-  {{- range $key, $value := .Values.indexers }}
+  {{- range $key, $value := .Values.config.indexers }}
   {{ $key }}: {{ toYaml $value | indent 4 }}
   {{- end }}
