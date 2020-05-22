@@ -62,8 +62,8 @@ spec:
           readOnly: false
       volumes:
       - name: plex-downloads
-      {{- if .Values.downloadVolume }}
-{{ toYaml .Values.downloadVolume | indent 8 }}
+      {{- if .Values.downloadVolume -}}
+        {{ toYaml .Values.downloadVolume | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}

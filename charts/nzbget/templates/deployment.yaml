@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "nzbget.selectorLabels" . | nindent 6 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "nzbget.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "nzbget.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: nzbget
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.http.port }}
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: nzbget-config
+          mountPath: /config
+          readOnly: false
+        - name: plex-downloads
+          mountPath: /downloads
+          readOnly: false
+        - name: plex-nzbget
+          mountPath: /nzbget
+          readOnly: false
+      volumes:
+      # this volume will be treated as the final resting place for
+      # downloads
+      - name: plex-downloads
+      {{- if .Values.volumes.downloads -}}
+        {{ toYaml .Values.volumes.downloads | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      # this volume is for where nzbget downloads files... they'll be
+      # moved to the downloads folder when finished
+      - name: plex-nzbget
+      {{- if .Values.volumes.nzbget -}}
+        {{ toYaml .Values.volumes.nzbget | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: nzbget-config
+        emptyDir: {}
+
