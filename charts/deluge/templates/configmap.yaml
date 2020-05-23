@@ -126,7 +126,7 @@ data:
         "sequential_download": false,
         "share_ratio_limit": 2.0,
         "shared": {{ .Values.config.shared }},
-        "stop_seed_at_ratio": false,
+        "stop_seed_at_ratio": {{ .Values.config.stopSeedAtRatio }},
         "stop_seed_ratio": 2.0,
         "super_seeding": false,
         "torrentfiles_location": "/root/Downloads",
