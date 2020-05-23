@@ -18,7 +18,7 @@ spec:
       labels:
         {{- include "radarr.labels" . | nindent 8 }}
       annotations:
-        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule -}}
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
         backup.velero.io/backup-volumes: config
         {{- end }}
     spec:
