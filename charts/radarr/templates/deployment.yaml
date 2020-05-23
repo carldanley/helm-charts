@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "radarr.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "radarr.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "radarr.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: radarr
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.http.port }}
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        volumeMounts:
+        - name: plex-movies
+          mountPath: /movies
+          readOnly: false
+        - name: config
+          mountPath: /config
+          readOnly: false
+        - name: plex-downloads
+          mountPath: /downloads
+          readOnly: false
+      volumes:
+      # radarr will look for downloaded movies in this folder
+      - name: plex-downloads
+      {{- if .Values.volumes.downloads -}}
+        {{ toYaml .Values.volumes.downloads | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      # when radarr has detected a movie, it will be moved to this
+      # directory for long-term storage
+      - name: plex-movies
+      {{- if .Values.volumes.movies -}}
+        {{ toYaml .Values.volumes.movies | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: config
+        emptyDir: {}
+

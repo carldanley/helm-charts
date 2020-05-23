@@ -3,28 +3,38 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
-config: ""
-
 volumes:
   downloads: {}
     # nfs:
     #   server: 1.1.1.1
     #   path: /volume1/downloads
 
-  nzbget: {}
+  movies: {}
     # nfs:
     #   server: 1.1.1.1
     #   path: /volume1/downloads
 
 image:
-  repository: linuxserver/nzbget
+  repository: linuxserver/radarr
   pullPolicy: IfNotPresent
   tag: latest
+
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 10Mi
+  veleroSchedule:
+    enabled: true
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
 
 service:
   type: ClusterIP
   http:
-    port: 6789
+    port: 7878
 
 ingress:
   enabled: false
