@@ -17,6 +17,10 @@ spec:
     metadata:
       labels:
         {{- include "radarr.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule -}}
+        backup.velero.io/backup-volumes: config
+        {{- end }}
     spec:
       containers:
       - name: radarr
@@ -59,5 +63,11 @@ spec:
         emptyDir: {}
       {{- end }}
       - name: config
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- else }}
         emptyDir: {}
+      {{- end }}
+
 

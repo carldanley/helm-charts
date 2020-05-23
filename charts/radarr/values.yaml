@@ -24,12 +24,14 @@ persistence:
   accessModes:
   - ReadWriteOnce
   storageClassName: default
-  size: 10Mi
+  size: 100Mi
   veleroSchedule:
     enabled: true
+    veleroNamespace: "velero"
     schedule: "0 */6 * * *"
     ttl: "168h"
     includedNamespaces: []
+    # - plex-media
 
 service:
   type: ClusterIP

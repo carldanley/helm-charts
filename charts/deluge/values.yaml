@@ -51,6 +51,7 @@ persistence:
   size: 10Mi
   veleroSchedule:
     enabled: true
+    veleroNamespace: "velero"
     schedule: "0 */6 * * *"
     ttl: "168h"
     includedNamespaces: []
