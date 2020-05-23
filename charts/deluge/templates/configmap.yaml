@@ -19,7 +19,7 @@ data:
         "base": "/",
         "cert": "ssl/daemon.cert",
         "default_daemon": "",
-        "enabled_plugins": [],
+        "enabled_plugins": ["labels"],
         "first_login": false,
         "https": false,
         "interface": "0.0.0.0",
