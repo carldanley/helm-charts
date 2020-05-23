@@ -7,3 +7,8 @@ role: diskstation-manager
 app: synology
 role: prometheus-node-exporter
 {{- end }}
+
+{{- define "plexMediaServer.labels" -}}
+app: synology
+role: plex-media-server
+{{- end }}

@@ -1,0 +1,29 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-plex-media-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "plexMediaServer.labels" . | nindent 4 }}
+subsets:
+- addresses:
+  - ip: {{ .Values.synologyIP | quote }}
+  ports:
+  - port: {{ .Values.plexMediaServer.service.port }}
+    name: plex
+    protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-plex-media-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "plexMediaServer.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.plexMediaServer.service.type }}
+  ports:
+  - port: {{ .Values.plexMediaServer.service.port }}
+    name: plex
+    protocol: TCP

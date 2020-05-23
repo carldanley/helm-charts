@@ -25,3 +25,8 @@ prometheusNodeExporter:
     type: ClusterIP
     metrics:
       port: 9100
+
+plexMediaServer:
+  service:
+    type: ClusterIP
+    port: 32400
