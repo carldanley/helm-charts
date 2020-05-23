@@ -18,6 +18,7 @@ config:
   maxUploadSpeed: -1.0
   maxUploadSpeedPerTorrent: -1
   moveCompleted: false
+  moveCompletedPath: "/root/Downloads"
   queueNewToTop: false
   proxy:
     anonymousMode: false

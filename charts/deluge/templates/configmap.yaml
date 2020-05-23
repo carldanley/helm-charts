@@ -85,7 +85,7 @@ data:
         "max_upload_speed": {{ .Values.config.maxUploadSpeed }},
         "max_upload_speed_per_torrent": {{ .Values.config.maxUploadSpeedPerTorrent }},
         "move_completed": {{ .Values.config.moveCompleted }},
-        "move_completed_path": "/root/Downloads",
+        "move_completed_path": {{ .Values.config.moveCompletedPath | quote }},
         "move_completed_paths_list": [],
         "natpmp": true,
         "new_release_check": false,
