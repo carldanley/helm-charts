@@ -20,6 +20,9 @@ config:
   moveCompleted: false
   moveCompletedPath: "/root/Downloads"
   queueNewToTop: false
+  removeSeedAtRatio: false
+  seedTimeLimit: 180
+  shared: false
   proxy:
     anonymousMode: false
     forceProxy: false
