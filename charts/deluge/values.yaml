@@ -22,7 +22,10 @@ config:
   queueNewToTop: false
   removeSeedAtRatio: false
   stopSeedAtRatio: false
+  stopSeedRatio: 2.0
   seedTimeLimit: 180
+  seedTimeRatioLimit: 7.0
+  shareRatioLimit: 2.0
   shared: false
   proxy:
     anonymousMode: false
