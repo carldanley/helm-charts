@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "homeAssistant.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "homeAssistant.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "homeAssistant.labels" . | nindent 8 }}
+    spec:
+      initContainers:
+      - name: git-sync
+        image: "{{ .Values.gitSync.image.repository }}:{{ .Values.gitSync.image.tag }}"
+        imagePullPolicy: {{ .Values.gitSync.image.pullPolicy }}
+        command: ['sh', '-c', '[ "$(ls /config)" ] || git clone {{ .Values.gitSync.repository }} /config']
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: git-secret
+          mountPath: /root/.ssh
+      containers:
+      - name: homeassistant
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8123
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: api
+            scheme: HTTP
+          initialDelaySeconds: 60
+          failureThreshold: 5
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: api
+            scheme: HTTP
+          initialDelaySeconds: 60
+          failureThreshold: 5
+          timeoutSeconds: 10
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+      volumes:
+      - name: config
+        emptyDir: {}
+      - name: git-secret
+        secret:
+          defaultMode: 256
+          secretName: {{ .Release.Name }}
