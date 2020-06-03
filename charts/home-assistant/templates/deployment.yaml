@@ -33,6 +33,8 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ['cp', '/homeassistant-secrets/secrets.yaml', '/config']
         volumeMounts:
+        - name: config
+          mountPath: /config
         - name: homeassistant-secrets
           mountPath: /homeassistant-secrets
       containers:
