@@ -13,6 +13,7 @@ gitSync:
   repository: "changeme"
   ssh:
     privateKey: "changeme"
+    config: ""
 
 service:
   type: ClusterIP
