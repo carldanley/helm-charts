@@ -64,8 +64,6 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-        - name: homeassistant-secrets
-          mountPath: /homeassistant-secrets
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
       volumes:
