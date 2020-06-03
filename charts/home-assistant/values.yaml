@@ -18,6 +18,19 @@ gitSync:
     privateKey: "changeme"
     config: ""
 
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 2Gi
+  veleroSchedule:
+    enabled: true
+    veleroNamespace: "velero"
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
+
 service:
   type: ClusterIP
   port: 8123

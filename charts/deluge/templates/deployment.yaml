@@ -68,16 +68,20 @@ spec:
           readOnly: false
       volumes:
       - name: plex-downloads
-      {{- if .Values.downloadVolume }}
+        {{- if .Values.downloadVolume }}
 {{ toYaml .Values.downloadVolume | indent 8 }}
-      {{- else }}
+        {{- else }}
         emptyDir: {}
-      {{- end }}
+        {{- end }}
       - name: config
         emptyDir: {}
       - name: deluge-state
+        {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: deluge
+          claimName: {{ .Release.Name }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
       - name: config-files
         configMap:
           name: {{ .Release.Name }}

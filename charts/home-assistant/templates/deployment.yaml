@@ -45,25 +45,28 @@ spec:
         - name: http
           containerPort: 8123
           protocol: TCP
-        # livenessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: http
-        #     scheme: HTTP
-        #   initialDelaySeconds: 30
-        #   failureThreshold: 18
-        #   timeoutSeconds: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: http
-        #     scheme: HTTP
-        #   initialDelaySeconds: 30
-        #   failureThreshold: 18
-        #   timeoutSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          failureThreshold: 18
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          failureThreshold: 18
+          timeoutSeconds: 10
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: homeassistant-state
+          mountPath: /config/.storage
+          readOnly: false
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
       volumes:
@@ -80,3 +83,10 @@ spec:
           items:
           - key: secrets.yaml
             path: secrets.yaml
+      - name: homeassistant-state
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
