@@ -50,16 +50,16 @@ spec:
             path: /
             port: http
             scheme: HTTP
-          initialDelaySeconds: 60
-          failureThreshold: 5
+          initialDelaySeconds: 30
+          failureThreshold: 18
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /
             port: http
             scheme: HTTP
-          initialDelaySeconds: 60
-          failureThreshold: 5
+          initialDelaySeconds: 30
+          failureThreshold: 18
           timeoutSeconds: 10
         volumeMounts:
         - name: config
