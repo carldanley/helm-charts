@@ -31,7 +31,7 @@ spec:
       - name: copy-secrets
         image: alpine:latest
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'cp /homeassistant-secrets/secrets.yaml /config']
+        command: ['cp', '/homeassistant-secrets/secrets.yaml', '/config']
         volumeMounts:
         - name: homeassistant-secrets
           mountPath: /homeassistant-secrets
@@ -62,6 +62,8 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: homeassistant-secrets
+          mountPath: /homeassistant-secrets
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
       volumes:
