@@ -26,8 +26,15 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
-        - name: git-secret
+        - name: git-credentials
           mountPath: /root/.ssh
+      - name: copy-secrets
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'cp /homeassistant-secrets/secrets.yaml /config']
+        volumeMounts:
+        - name: homeassistant-secrets
+          mountPath: /homeassistant-secrets
       containers:
       - name: homeassistant
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -60,7 +67,14 @@ spec:
       volumes:
       - name: config
         emptyDir: {}
-      - name: git-secret
+      - name: git-credentials
         secret:
           defaultMode: 256
-          secretName: {{ .Release.Name }}
+          secretName: {{ .Release.Name }}-git-credentials
+      - name: homeassistant-secrets
+        secret:
+          defaultMode: 256
+          secretName: {{ .Release.Name }}-homeassistant-secrets
+          items:
+          - key: secrets.yaml
+            path: secrets.yaml
