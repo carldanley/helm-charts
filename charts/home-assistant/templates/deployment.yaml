@@ -22,8 +22,7 @@ spec:
       - name: git-sync
         image: "{{ .Values.gitSync.image.repository }}:{{ .Values.gitSync.image.tag }}"
         imagePullPolicy: {{ .Values.gitSync.image.pullPolicy }}
-        # command: ['sh', '-c', '[ "$(ls /config)" ] || git clone {{ .Values.gitSync.repository }} /config']
-        command: ['sleep', '90000']
+        command: ['sh', '-c', '[ "$(ls /config)" ] || git clone {{ .Values.gitSync.repository }} /config']
         volumeMounts:
         - name: config
           mountPath: /config
