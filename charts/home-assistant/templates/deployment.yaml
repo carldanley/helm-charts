@@ -44,23 +44,23 @@ spec:
         ports:
         - name: http
           containerPort: 8123
-          protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: 30
-          failureThreshold: 18
-          timeoutSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: 30
-          failureThreshold: 18
-          timeoutSeconds: 10
+        #   protocol: TCP
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        #     scheme: HTTP
+        #   initialDelaySeconds: 30
+        #   failureThreshold: 18
+        #   timeoutSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        #     scheme: HTTP
+        #   initialDelaySeconds: 30
+        #   failureThreshold: 18
+        #   timeoutSeconds: 10
         volumeMounts:
         - name: config
           mountPath: /config
