@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: eclipse-mosquitto
+  pullPolicy: IfNotPresent
+  tag: "1.6.10"
+
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 10Mi
+  veleroSchedule:
+    enabled: true
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
+
+service:
+  type: ClusterIP
+  port: 1883
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

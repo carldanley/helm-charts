@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mosquitto.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "mosquitto.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "mosquitto.labels" . | nindent 8 }}
+    spec:
+      initContainers:
+      - name: copy-configs
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/config-files/copy-files.sh"]
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: config-files
+          mountPath: /config-files
+      containers:
+      - name: mosquitto
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: mqtt
+          containerPort: {{ .Values.service.port }}
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /mosquitto/config
+          readOnly: false
+        - name: data
+          mountPath: /mosquitto/data
+          readOnly: false
+      volumes:
+      - name: data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      - name: config
+        emptyDir: {}
+      - name: config-files
+        configMap:
+          name: {{ .Release.Name }}-configs
