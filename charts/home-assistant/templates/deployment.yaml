@@ -49,7 +49,7 @@ spec:
           httpGet:
             path: /
             port: http
-            scheme: HTTPS
+            scheme: HTTP
           initialDelaySeconds: 30
           failureThreshold: 18
           timeoutSeconds: 10
@@ -57,7 +57,7 @@ spec:
           httpGet:
             path: /
             port: http
-            scheme: HTTPS
+            scheme: HTTP
           initialDelaySeconds: 30
           failureThreshold: 18
           timeoutSeconds: 10
