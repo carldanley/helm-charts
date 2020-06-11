@@ -56,3 +56,12 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+
+extraVolumes: []
+# - name: homeassistant-tls
+#   secret:
+#     secretName: home-assistant-tls
+
+extraVolumeMounts: []
+# - name: homeassistant-tls
+#   mountPath: /config/tls

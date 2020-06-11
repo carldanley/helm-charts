@@ -67,6 +67,7 @@ spec:
         - name: homeassistant-state
           mountPath: /config/.storage
           readOnly: false
+        {{- if .Values.extraVolumeMounts }}{{ toYaml .Values.extraVolumeMounts | trim | nindent 8 }}{{ end }}
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
       volumes:
@@ -90,3 +91,4 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
+      {{- if .Values.extraVolumes }}{{ toYaml .Values.extraVolumes | trim | nindent 6 }}{{ end }}
