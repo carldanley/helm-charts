@@ -42,22 +42,22 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - name: http
+        - name: https
           containerPort: 8123
           protocol: TCP
         livenessProbe:
           httpGet:
             path: /
-            port: http
-            scheme: HTTP
+            port: https
+            scheme: HTTPS
           initialDelaySeconds: 30
           failureThreshold: 18
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /
-            port: http
-            scheme: HTTP
+            port: https
+            scheme: HTTPS
           initialDelaySeconds: 30
           failureThreshold: 18
           timeoutSeconds: 10
