@@ -4,11 +4,11 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "radarr.labels" . | nindent 4 }}
+    {{- include "sonarr.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "radarr.selectorLabels" . | nindent 6 }}
+      {{- include "sonarr.selectorLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
   strategy:
@@ -16,19 +16,19 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "radarr.labels" . | nindent 8 }}
+        {{- include "sonarr.labels" . | nindent 8 }}
       annotations:
         {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
         backup.velero.io/backup-volumes: config
         {{- end }}
     spec:
       containers:
-      - name: radarr
+      - name: sonarr
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - name: http
-          containerPort: 7878
+          containerPort: 8989
         env:
         - name: PUID
           value: {{ .Values.puid | quote }}
@@ -37,8 +37,8 @@ spec:
         - name: TZ
           value: {{ .Values.timezone | quote }}
         volumeMounts:
-        - name: plex-movies
-          mountPath: /movies
+        - name: plex-shows
+          mountPath: /tv
           readOnly: false
         - name: config
           mountPath: /config
@@ -47,18 +47,18 @@ spec:
           mountPath: /downloads
           readOnly: false
       volumes:
-      # radarr will look for downloaded movies in this folder
+      # sonarr will look for downloaded shows in this folder
       - name: plex-downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      # when radarr has detected a movie, it will be moved to this
+      # when sonarr has detected a show, it will be moved to this
       # directory for long-term storage
-      - name: plex-movies
-      {{- if .Values.volumes.movies -}}
-        {{ toYaml .Values.volumes.movies | nindent 8 }}
+      - name: plex-shows
+      {{- if .Values.volumes.shows -}}
+        {{ toYaml .Values.volumes.shows | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
