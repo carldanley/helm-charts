@@ -16,9 +16,6 @@ spec:
         {{- include "drone.server.labels" . | nindent 8 }}
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
-        backup.velero.io/backup-volumes: data
-        {{- end }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
