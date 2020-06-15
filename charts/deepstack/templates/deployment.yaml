@@ -30,7 +30,9 @@ spec:
         - name: http
           containerPort: 5000
         env:
-        - name: VISION-FACE
+        - name: VISION-SCENE
+          value: "True"
+        - name: VISION-DETECTION
           value: "True"
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
