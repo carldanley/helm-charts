@@ -12,7 +12,7 @@ data:
     cp -R /config-files/. /config
 
   mosquitto.conf: |
-    password_file: /mosquitto/config/password-file.conf
+    password_file /mosquitto/config/password-file.conf
     {{- if .Values.persistence.enabled -}}
     persistence true
     persistence_location /mosquitto/data
