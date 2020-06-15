@@ -1,8 +1,9 @@
 replicaCount: 1
 
 mosquitto:
-  username: admin
-  password: admin
+  # filled with: admin:admin
+  credentials: |
+    admin:$6$VzopJ0P7FiPgkQOV$Zs76ceIjeG999fN3DR7xsl5jP7CgVlRLLp576Jg/5dcYORS90HNIOX66WnALeuXjNVbTI+ZdD8FvKXI6Ec42tw==
 
 image:
   repository: eclipse-mosquitto

@@ -12,11 +12,11 @@ data:
     cp -R /config-files/. /config
 
   mosquitto.conf: |
-    password_file /mosquitto/config/password-file.conf
+    allow_anonymous false
+    password_file /mosquitto/config/credentials
     {{- if .Values.persistence.enabled -}}
     persistence true
     persistence_location /mosquitto/data
     {{- end }}
 
-  password-file.conf: |
-    {{ .Values.mosquitto.username }}:{{ .Values.mosquitto.password }}
+  credentials: {{ .Values.mosquitto.credentials | quote }}
