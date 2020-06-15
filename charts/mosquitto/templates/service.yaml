@@ -9,7 +9,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   - name: mqtt
-    port: {{ .Values.service.port }}
+    port: {{ .Values.service.http.port }}
     targetPort: mqtt
   selector:
     {{- include "mosquitto.selectorLabels" . | nindent 4 }}
