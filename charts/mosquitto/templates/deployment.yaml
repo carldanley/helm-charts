@@ -17,6 +17,10 @@ spec:
     metadata:
       labels:
         {{- include "mosquitto.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
+        backup.velero.io/backup-volumes: data
+        {{- end }}
     spec:
       initContainers:
       - name: copy-configs

@@ -17,6 +17,10 @@ spec:
     metadata:
       labels:
         {{- include "homeAssistant.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
+        backup.velero.io/backup-volumes: homeassistant-state
+        {{- end }}
     spec:
       initContainers:
       - name: git-sync
