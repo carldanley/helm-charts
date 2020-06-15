@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "deepstack.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "deepstack.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "deepstack.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
+        backup.velero.io/backup-volumes: datastore
+        {{- end }}
+    spec:
+      containers:
+      - name: deepstack
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 5000
+        env:
+        - name: VISION-FACE
+          value: "True"
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: datastore
+          mountPath: /datastore
+          readOnly: false
+      volumes:
+      - name: datastore
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}

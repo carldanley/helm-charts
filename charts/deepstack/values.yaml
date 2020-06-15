@@ -1,0 +1,49 @@
+image:
+  repository: deepquestai/deepstack
+  tag: latest
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 10Gi
+  veleroSchedule:
+    enabled: true
+    veleroNamespace: "velero"
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
+
+service:
+  type: ClusterIP
+  http:
+    port: 5000
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+  - host: chart-example.local
+    paths: []
+    # - /
+  tls: {}
+  # - secretName: chart-example-tls
+  #   hosts:
+  #   - chart-example.local
+
+# https://readthedocs.org/projects/deepstackpython/downloads/pdf/latest/
+# Minimum Requirements:
+# Intel Core i5
+# 8GB RAM
+# 10GB Disk Space
+resources: {}
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi

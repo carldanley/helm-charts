@@ -1,0 +1,19 @@
+{{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule -}}
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.persistence.veleroSchedule.veleroNamespace | quote }}
+  labels:
+    {{- include "deepstack.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.persistence.veleroSchedule.schedule | quote }}
+  template:
+    ttl: {{ .Values.persistence.veleroSchedule.ttl | quote }}
+    includedNamespaces:
+    {{- toYaml .Values.persistence.veleroSchedule.includedNamespaces | trim | nindent 4 }}
+    labelSelector:
+      matchLabels:
+        {{- include "deepstack.selectorLabels" . | nindent 8 }}
+{{- end }}
+

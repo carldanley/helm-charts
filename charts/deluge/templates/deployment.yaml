@@ -38,14 +38,14 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - name: http
-          containerPort: {{ .Values.service.http.port }}
+          containerPort: 8112
         - name: daemon
-          containerPort: {{ .Values.service.daemon.port }}
+          containerPort: 58846
         - name: incoming-tcp
-          containerPort: {{ .Values.service.incomingTCP.port }}
+          containerPort: 53160
           protocol: TCP
         - name: incoming-udp
-          containerPort: {{ .Values.service.incomingUDP.port }}
+          containerPort: 53160
           protocol: UDP
         env:
         - name: PUID
