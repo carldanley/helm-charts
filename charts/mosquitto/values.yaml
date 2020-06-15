@@ -1,5 +1,9 @@
 replicaCount: 1
 
+mosquitto:
+  username: admin
+  password: admin
+
 image:
   repository: eclipse-mosquitto
   pullPolicy: IfNotPresent
