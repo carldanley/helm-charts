@@ -22,7 +22,7 @@ spec:
       - name: hass-go-coordinator
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: ["-v", "3"]
+        args: ["-v", {{ .Values.logging.verbosity | quote }}]
         env:
         - name: TZ
           value: {{ .Values.timezone | quote }}

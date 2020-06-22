@@ -1,6 +1,9 @@
 replicaCount: 1
 timezone: America/New_York
 
+logging:
+  verbosity: 0
+
 image:
   repository: carldanley/hass-go-coordinator
   pullPolicy: IfNotPresent
