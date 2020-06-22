@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hassGoCoordinator.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "hassGoCoordinator.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "hassGoCoordinator.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: hass-go-coordinator
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        - name: ENV_FILE
+          value: "/secrets/.env"
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: secrets
+          readOnly: true
+          mountPath: "/secrets"
+      volumes:
+      - name: secrets
+        secret:
+          secretName: {{ .Release.Name }}

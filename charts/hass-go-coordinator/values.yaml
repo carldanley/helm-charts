@@ -1,0 +1,38 @@
+replicaCount: 1
+timezone: America/New_York
+
+image:
+  repository: carldanley/hass-go-coordinator
+  pullPolicy: IfNotPresent
+  tag: "0.1"
+
+config:
+  homeassistant:
+    host: "127.0.0.1:5000"
+    token: "token"
+  blueiris:
+    host: "127.0.0.1:81"
+    username: "username"
+    password: "password"
+  mqtt:
+    host: "tcp://127.0.0.1:1883"
+    username: "username"
+    password: "password"
+    clientID: "hass-go-coordinator"
+    topics:
+      scan: "home.cameras.scan"
+      motion: "home.cameras.motion"
+  deepstack:
+    host: "http://127.0.0.1:80"
+    confidence:
+      min: 0.5
+      max: 1.0
+
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

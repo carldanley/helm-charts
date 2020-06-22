@@ -1,3 +1,5 @@
+replicaCount: 1
+
 image:
   repository: deepquestai/deepstack
   tag: latest

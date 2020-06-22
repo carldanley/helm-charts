@@ -1,0 +1,6 @@
+apiVersion: v2
+name: hass-go-coordinator
+description: A helm chart for installing hass-go-coordinator
+type: application
+version: 1.0.0
+appVersion: 1.0.0
