@@ -9,7 +9,13 @@ image:
   pullPolicy: IfNotPresent
   tag: "0.1"
 
+annotations: {}
+  # prometheus.io/scrape: "true"
+  # prometheus.io/port: "9200"
+
 config:
+  server:
+    port: 8181
   homeassistant:
     host: "127.0.0.1:5000"
     token: "token"

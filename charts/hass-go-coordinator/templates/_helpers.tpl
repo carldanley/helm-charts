@@ -7,6 +7,7 @@ app: hass-go-coordinator
 {{- end }}
 
 {{- define "secrets" -}}
+SERVER_PORT={{ .Values.config.server.port | quote }}
 HOME_ASSISTANT_HOST={{ .Values.config.homeassistant.host | quote }}
 HOME_ASSISTANT_TOKEN={{ .Values.config.homeassistant.token | quote }}
 BLUEIRIS_HOST={{ .Values.config.blueiris.host | quote }}
