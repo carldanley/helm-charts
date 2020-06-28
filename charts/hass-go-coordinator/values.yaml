@@ -28,9 +28,6 @@ config:
     username: "username"
     password: "password"
     clientID: "hass-go-coordinator"
-    topics:
-      scan: "home.cameras.scan"
-      motion: "home.cameras.motion"
   deepstack:
     host: "http://127.0.0.1:80"
     confidence:
