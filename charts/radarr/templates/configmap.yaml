@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "deluge.labels" . | nindent 4 }}
+    {{- include "radarr.labels" . | nindent 4 }}
 data:
 {{- $root := . -}}
 {{- range $key, $value := .Values.scripts }}
