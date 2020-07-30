@@ -37,18 +37,25 @@ spec:
         - name: TZ
           value: {{ .Values.timezone | quote }}
         volumeMounts:
-        - name: plex-movies
+        - name: movies
           mountPath: /movies
           readOnly: false
         - name: config
           mountPath: /config
           readOnly: false
-        - name: plex-downloads
+        - name: downloads
           mountPath: /downloads
           readOnly: false
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
       volumes:
+      # any 1-off scripts will be stored here (so they can be available for radarr)
+      - name: scripts
+        configMap:
+          name: {{ .Release.Name }}
       # radarr will look for downloaded movies in this folder
-      - name: plex-downloads
+      - name: downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
       {{- else }}
@@ -56,7 +63,7 @@ spec:
       {{- end }}
       # when radarr has detected a movie, it will be moved to this
       # directory for long-term storage
-      - name: plex-movies
+      - name: movies
       {{- if .Values.volumes.movies -}}
         {{ toYaml .Values.volumes.movies | nindent 8 }}
       {{- else }}

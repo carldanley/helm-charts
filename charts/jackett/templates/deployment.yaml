@@ -57,11 +57,11 @@ spec:
         - name: config
           mountPath: /config/Jackett
           readOnly: false
-        - name: plex-downloads
+        - name: downloads
           mountPath: /downloads
           readOnly: false
       volumes:
-      - name: plex-downloads
+      - name: downloads
       {{- if .Values.downloadVolume -}}
         {{ toYaml .Values.downloadVolume | nindent 8 }}
       {{- else }}

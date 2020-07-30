@@ -3,6 +3,8 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
+scripts: {}
+
 volumes:
   downloads: {}
     # nfs:
@@ -31,7 +33,7 @@ persistence:
     schedule: "0 */6 * * *"
     ttl: "168h"
     includedNamespaces: []
-    # - plex-media
+    # - home-media
 
 service:
   type: ClusterIP

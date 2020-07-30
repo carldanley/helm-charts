@@ -63,11 +63,11 @@ spec:
         - name: deluge-state
           mountPath: /config/state
           readOnly: false
-        - name: plex-downloads
+        - name: downloads
           mountPath: /downloads
           readOnly: false
       volumes:
-      - name: plex-downloads
+      - name: downloads
         {{- if .Values.downloadVolume }}
 {{ toYaml .Values.downloadVolume | indent 8 }}
         {{- else }}

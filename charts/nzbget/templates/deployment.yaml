@@ -48,16 +48,16 @@ spec:
         - name: config
           mountPath: /config
           readOnly: false
-        - name: plex-downloads
+        - name: downloads
           mountPath: /downloads
           readOnly: false
-        - name: plex-nzbget
+        - name: nzbget
           mountPath: /nzbget
           readOnly: false
       volumes:
       # this volume will be treated as the final resting place for
       # downloads
-      - name: plex-downloads
+      - name: downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
       {{- else }}
@@ -65,7 +65,7 @@ spec:
       {{- end }}
       # this volume is for where nzbget downloads files... they'll be
       # moved to the downloads folder when finished
-      - name: plex-nzbget
+      - name: nzbget
       {{- if .Values.volumes.nzbget -}}
         {{ toYaml .Values.volumes.nzbget | nindent 8 }}
       {{- else }}

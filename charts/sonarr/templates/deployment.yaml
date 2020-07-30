@@ -37,18 +37,18 @@ spec:
         - name: TZ
           value: {{ .Values.timezone | quote }}
         volumeMounts:
-        - name: plex-shows
+        - name: shows
           mountPath: /tv
           readOnly: false
         - name: config
           mountPath: /config
           readOnly: false
-        - name: plex-downloads
+        - name: downloads
           mountPath: /downloads
           readOnly: false
       volumes:
       # sonarr will look for downloaded shows in this folder
-      - name: plex-downloads
+      - name: downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
       {{- else }}
@@ -56,7 +56,7 @@ spec:
       {{- end }}
       # when sonarr has detected a show, it will be moved to this
       # directory for long-term storage
-      - name: plex-shows
+      - name: shows
       {{- if .Values.volumes.shows -}}
         {{ toYaml .Values.volumes.shows | nindent 8 }}
       {{- else }}
