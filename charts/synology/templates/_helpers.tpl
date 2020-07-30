@@ -17,3 +17,8 @@ role: plex
 app: synology
 role: jellyfin
 {{- end }}
+
+{{- define "bitwarden.labels" -}}
+app: synology
+role: jellyfin
+{{- end }}

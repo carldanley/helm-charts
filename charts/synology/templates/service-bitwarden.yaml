@@ -1,0 +1,31 @@
+{{- if .Values.bitwarden.enabled -}}
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-bitwarden
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "bitwarden.labels" . | nindent 4 }}
+subsets:
+- addresses:
+  - ip: {{ .Values.synologyIP | quote }}
+  ports:
+  - port: {{ .Values.bitwarden.service.port }}
+    name: bitwarden
+    protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-bitwarden
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "bitwarden.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bitwarden.service.type }}
+  ports:
+  - port: {{ .Values.bitwarden.service.port }}
+    name: bitwarden
+    protocol: TCP
+{{- end }}
