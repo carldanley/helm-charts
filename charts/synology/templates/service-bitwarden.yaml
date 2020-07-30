@@ -11,8 +11,11 @@ subsets:
 - addresses:
   - ip: {{ .Values.synologyIP | quote }}
   ports:
-  - port: {{ .Values.bitwarden.service.port }}
-    name: bitwarden
+  - port: {{ .Values.bitwarden.service.ports.web }}
+    name: web
+    protocol: TCP
+  - port: {{ .Values.bitwarden.service.ports.websockets }}
+    name: websockets
     protocol: TCP
 ---
 kind: Service
@@ -25,7 +28,10 @@ metadata:
 spec:
   type: {{ .Values.bitwarden.service.type }}
   ports:
-  - port: {{ .Values.bitwarden.service.port }}
-    name: bitwarden
+  - port: {{ .Values.bitwarden.service.ports.web }}
+    name: web
+    protocol: TCP
+  - port: {{ .Values.bitwarden.service.ports.websockets }}
+    name: websockets
     protocol: TCP
 {{- end }}
