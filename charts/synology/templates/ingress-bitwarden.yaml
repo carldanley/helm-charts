@@ -33,7 +33,7 @@ spec:
         backend:
           serviceName: {{ $releaseName }}-bitwarden
           servicePort: {{ $servicePortsWeb }}
-      - path: /notifications
+      - path: /notifications/hub
         backend:
           serviceName: {{ $releaseName }}-bitwarden
           servicePort: {{ $servicePortsWebsockets }}
