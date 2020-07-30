@@ -1,7 +1,22 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-init-copy
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "radarr.labels" . | nindent 4 }}
+data:
+  copy-files.sh: |
+    #!/usr/bin/env sh
+    set -x
+    cp -R /script-files/. /scripts
+    chmod -R +x /scripts
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-scripts
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "radarr.labels" . | nindent 4 }}
