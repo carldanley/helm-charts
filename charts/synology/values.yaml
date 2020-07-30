@@ -24,8 +24,7 @@ prometheusNodeExporter:
 
   service:
     type: ClusterIP
-    metrics:
-      port: 9100
+    port: 9100
 
 plex:
   enabled: false
