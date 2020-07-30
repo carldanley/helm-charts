@@ -59,9 +59,7 @@ bitwarden:
 
   service:
     type: ClusterIP
-    ports:
-      web: 80
-      websockets: 3012
+    port: 80
 
   ingress:
     enabled: false
@@ -69,7 +67,9 @@ bitwarden:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-    - chart-example.local
+      - host: chart-example.local
+        paths: []
+        # - /
     tls: {}
     # - secretName: chart-example-tls
     #   hosts:

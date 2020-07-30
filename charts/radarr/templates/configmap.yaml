@@ -21,6 +21,8 @@ metadata:
   labels:
     {{- include "radarr.labels" . | nindent 4 }}
 data:
+  testing.txt: |
+    This file should exist.
 {{- $root := . -}}
 {{- range $key, $value := .Values.scripts }}
   {{- if $key | regexMatch ".*\\.ya?ml$" }}

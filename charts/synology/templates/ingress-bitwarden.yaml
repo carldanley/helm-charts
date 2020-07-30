@@ -1,6 +1,5 @@
 {{- if and .Values.bitwarden.enabled .Values.bitwarden.ingress.enabled -}}
-{{- $servicePortsWeb := .Values.bitwarden.service.ports.web -}}
-{{- $servicePortsWebsockets := .Values.bitwarden.service.ports.websockets -}}
+{{- $servicePort := .Values.bitwarden.service.port -}}
 {{- $releaseName := .Release.Name -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -26,16 +25,14 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.bitwarden.ingress.hosts }}
-  - host: {{ . | quote }}
+  - host: {{ .host | quote }}
     http:
       paths:
-      - path: /
+      {{- range .paths }}
+      - path: {{ . }}
         backend:
           serviceName: {{ $releaseName }}-bitwarden
-          servicePort: {{ $servicePortsWeb }}
-      - path: /notifications/hub
-        backend:
-          serviceName: {{ $releaseName }}-bitwarden
-          servicePort: {{ $servicePortsWebsockets }}
+          servicePort: {{ $servicePort }}
+      {{- end }}
   {{- end }}
 {{- end }}
