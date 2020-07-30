@@ -10,7 +10,7 @@ subsets:
 - addresses:
   - ip: {{ .Values.synologyIP | quote }}
   ports:
-  - port: {{ .Values.diskstationManager.service.dsm.port }}
+  - port: {{ .Values.diskstationManager.service.port }}
     name: dsm
     protocol: TCP
 ---
@@ -24,6 +24,6 @@ metadata:
 spec:
   type: {{ .Values.diskstationManager.service.type }}
   ports:
-  - port: {{ .Values.diskstationManager.service.dsm.port }}
+  - port: {{ .Values.diskstationManager.service.port }}
     name: dsm
     protocol: TCP

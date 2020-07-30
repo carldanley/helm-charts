@@ -8,7 +8,12 @@ app: synology
 role: prometheus-node-exporter
 {{- end }}
 
-{{- define "plexMediaServer.labels" -}}
+{{- define "plex.labels" -}}
 app: synology
-role: plex-media-server
+role: plex
+{{- end }}
+
+{{- define "jellyfin.labels" -}}
+app: synology
+role: jellyfin
 {{- end }}

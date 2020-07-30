@@ -1,21 +1,21 @@
-{{- if .Values.diskstationManager.ingress.enabled -}}
-{{- $servicePort := .Values.diskstationManager.service.port -}}
+{{- if and .Values.jellyfin.enabled .Values.jellyfin.ingress.enabled -}}
+{{- $servicePort := .Values.jellyfin.service.port -}}
 {{- $releaseName := .Release.Name -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-diskstation-manager
+  name: {{ .Release.Name }}-jellyfin
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "diskstationManager.labels" . | nindent 4 }}
-  {{- with .Values.diskstationManager.ingress.annotations }}
+    {{- include "jellyfin.labels" . | nindent 4 }}
+  {{- with .Values.jellyfin.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.diskstationManager.ingress.tls }}
+  {{- if .Values.jellyfin.ingress.tls }}
   tls:
-  {{- range .Values.diskstationManager.ingress.tls }}
+  {{- range .Values.jellyfin.ingress.tls }}
   - hosts:
     {{- range .hosts }}
     - {{ . | quote }}
@@ -24,14 +24,14 @@ spec:
   {{- end }}
   {{- end }}
   rules:
-  {{- range .Values.diskstationManager.ingress.hosts }}
+  {{- range .Values.jellyfin.ingress.hosts }}
   - host: {{ .host | quote }}
     http:
       paths:
       {{- range .paths }}
       - path: {{ . }}
         backend:
-          serviceName: {{ $releaseName }}-diskstation-manager
+          serviceName: {{ $releaseName }}-jellyfin
           servicePort: {{ $servicePort }}
       {{- end }}
   {{- end }}
