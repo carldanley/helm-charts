@@ -48,7 +48,7 @@ spec:
           readOnly: false
         - name: scripts
           mountPath: /scripts
-          readOnly: true
+          readOnly: false
       volumes:
       # any 1-off scripts will be stored here (so they can be available for radarr)
       - name: scripts
