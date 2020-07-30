@@ -15,4 +15,3 @@ data:
   {{ $key }}: {{ toYaml $value | indent 4 }}
   {{- end }}
 {{- end -}}
-{{- end -}}
