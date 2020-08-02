@@ -1,5 +1,6 @@
 {{- if .Values.diskstationManager.ingress.enabled -}}
-{{- $servicePort := .Values.diskstationManager.service.port -}}
+{{- $servicePortsDSM := .Values.diskstationManager.service.ports.dsm -}}
+{{- $servicePortsPhotos := .Values.diskstationManager.service.ports.photos -}}
 {{- $releaseName := .Release.Name -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -25,14 +26,16 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.diskstationManager.ingress.hosts }}
-  - host: {{ .host | quote }}
+  - host: {{ . | quote }}
     http:
       paths:
-      {{- range .paths }}
-      - path: {{ . }}
+      - path: /
         backend:
           serviceName: {{ $releaseName }}-diskstation-manager
-          servicePort: {{ $servicePort }}
-      {{- end }}
+          servicePort: {{ $servicePortsDSM }}
+      - path: /photo
+        backend:
+          serviceName: {{ $releaseName }}-diskstation-manager
+          servicePort: {{ $servicePortsPhotos }}
   {{- end }}
 {{- end }}
