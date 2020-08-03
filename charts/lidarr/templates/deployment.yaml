@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "lidarr.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "lidarr.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "lidarr.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
+        backup.velero.io/backup-volumes: config
+        {{- end }}
+    spec:
+      containers:
+      - name: lidarr
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8686
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        volumeMounts:
+        - name: downloads
+          mountPath: /downloads
+          readOnly: false
+        - name: music
+          mountPath: /music
+          readOnly: false
+      volumes:
+      # lidarr will look for downloaded music in this folder
+      - name: music
+      {{- if .Values.volumes.music -}}
+        {{ toYaml .Values.volumes.music | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      # lidarr will look for downloads in this folder
+      - name: downloads
+      {{- if .Values.volumes.downloads -}}
+        {{ toYaml .Values.volumes.downloads | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}

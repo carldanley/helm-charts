@@ -4,24 +4,38 @@ pgid: 0
 timezone: America/New_York
 
 volumes:
-  tv: {}
+  downloads: {}
     # nfs:
     #   server: 1.1.1.1
-    #   path: /volume1/tv
+    #   path: /volume1/downloads
 
-  movies: {}
+  music: {}
     # nfs:
     #   server: 1.1.1.1
-    #   path: /volume1/movies
+    #   path: /volume1/music
 
 image:
-  repository: linuxserver/bazarr
+  repository: linuxserver/lidarr
   pullPolicy: IfNotPresent
-  tag: d17e2645-ls32
+  tag: 0.7.1.1722-ls15
+
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 100Mi
+  veleroSchedule:
+    enabled: true
+    veleroNamespace: "velero"
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
+    # - home-media
 
 service:
   type: ClusterIP
-  port: 6767
+  port: 8686
 
 ingress:
   enabled: false
