@@ -53,6 +53,9 @@ ingress:
   #   hosts:
   #   - chart-example.local
 
+configFiles: {}
+  # config.ini: {}
+
 resources: {}
   # limits:
   #   cpu: 100m

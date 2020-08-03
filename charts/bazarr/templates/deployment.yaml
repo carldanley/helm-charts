@@ -43,7 +43,14 @@ spec:
         - name: tv
           mountPath: /tv
           readOnly: false
+        - name: config-files
+          mountPath: /config/config
+          readOnly: false
       volumes:
+      # bazarr's config files
+      - name: config-files
+        configMap:
+          name: {{ .Release.Name }}-config-files
       # bazarr will look for downloaded tv in this folder
       - name: tv
       {{- if .Values.volumes.tv -}}
