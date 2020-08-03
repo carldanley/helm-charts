@@ -1,3 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-init-copy-config-files
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "bazarr.labels" . | nindent 4 }}
+data:
+  copy-config-files.sh: |
+    #!/usr/bin/env sh
+    set -x
+    cp -R /config-files/. /config
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:

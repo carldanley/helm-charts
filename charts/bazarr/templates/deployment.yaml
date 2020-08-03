@@ -22,6 +22,18 @@ spec:
         backup.velero.io/backup-volumes: config
         {{- end }}
     spec:
+      initContainers:
+      - name: copy-config-files
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/init-copy-config-files/copy-config-files.sh"]
+        volumeMounts:
+        - name: init-copy-config-files
+          mountPath: /init-copy-config-files
+        - name: config-files
+          mountPath: /config-files
+        - name: config
+          mountPath: /config
       containers:
       - name: bazarr
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -43,14 +55,19 @@ spec:
         - name: tv
           mountPath: /tv
           readOnly: false
-        - name: config-files
+        - name: config
           mountPath: /config/config
           readOnly: false
       volumes:
       # bazarr's config files
+      - name: init-copy-config-files
+        configMap:
+          name: {{ .Release.Name }}-init-copy-config-files
       - name: config-files
         configMap:
           name: {{ .Release.Name }}-config-files
+      - name: config
+        emptyDir: {}
       # bazarr will look for downloaded tv in this folder
       - name: tv
       {{- if .Values.volumes.tv -}}
