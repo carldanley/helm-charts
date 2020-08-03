@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "bazarr.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "bazarr.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "bazarr.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
+        backup.velero.io/backup-volumes: config
+        {{- end }}
+    spec:
+      containers:
+      - name: bazarr
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 6767
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        volumeMounts:
+        - name: movies
+          mountPath: /movies
+          readOnly: false
+        - name: tv
+          mountPath: /tv
+          readOnly: false
+      volumes:
+      # bazarr will look for downloaded tv in this folder
+      - name: tv
+      {{- if .Values.volumes.tv -}}
+        {{ toYaml .Values.volumes.tv | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      # bazarr will look for downloaded movies in this folder
+      - name: movies
+      {{- if .Values.volumes.movies -}}
+        {{ toYaml .Values.volumes.movies | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
