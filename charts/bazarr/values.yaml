@@ -1,6 +1,6 @@
 replicaCount: 1
-puid: 1000
-pgid: 1000
+puid: 0
+pgid: 0
 timezone: America/New_York
 
 scripts: {}
