@@ -22,6 +22,18 @@ spec:
         backup.velero.io/backup-volumes: config
         {{- end }}
     spec:
+      initContainers:
+      - name: copy-scripts
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/init-copy-scripts/copy-files.sh"]
+        volumeMounts:
+        - name: init-copy
+          mountPath: /init-copy-scripts
+        - name: script-files
+          mountPath: /script-files
+        - name: scripts
+          mountPath: /scripts
       containers:
       - name: lidarr
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -43,18 +55,39 @@ spec:
         - name: music
           mountPath: /music
           readOnly: false
+        - name: scripts
+          mountPath: /scripts
+          readOnly: false
       volumes:
-      # lidarr will look for downloaded music in this folder
+      # any 1-off scripts will be stored here (so they can be available for lidarr)
+      - name: init-copy
+        configMap:
+          name: {{ .Release.Name }}-init-copy
+      - name: script-files
+        configMap:
+          name: {{ .Release.Name }}-scripts
+      - name: scripts
+        emptyDir: {}
+      # when lidarr has detected a movie, it will be moved to this
+      # directory for long-term storage
       - name: music
       {{- if .Values.volumes.music -}}
         {{ toYaml .Values.volumes.music | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      # lidarr will look for downloads in this folder
+      # lidarr will look for downloaded movies in this folder
       - name: downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      # lidarr's config
+      - name: config
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
       {{- else }}
         emptyDir: {}
       {{- end }}

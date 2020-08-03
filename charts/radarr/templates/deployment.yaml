@@ -86,6 +86,7 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
+      # radarr's config
       - name: config
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
