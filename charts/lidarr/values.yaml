@@ -3,8 +3,6 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
-scripts: {}
-
 volumes:
   downloads: {}
     # nfs:
@@ -16,28 +14,20 @@ volumes:
     #   server: 1.1.1.1
     #   path: /volume1/music
 
+  config: {}
+    # nfs:
+    #   server: 1.1.1.1
+    #   path: /volume1/config
+
 image:
   repository: linuxserver/lidarr
   pullPolicy: IfNotPresent
-  tag: 0.7.1.1722-ls15
-
-persistence:
-  enabled: false
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: default
-  size: 100Mi
-  veleroSchedule:
-    enabled: true
-    veleroNamespace: "velero"
-    schedule: "0 */6 * * *"
-    ttl: "168h"
-    includedNamespaces: []
-    # - home-media
+  tag: 0.7.1.1729-ls16
 
 service:
   type: ClusterIP
-  port: 8686
+  ports:
+    http: 8686
 
 ingress:
   enabled: false
@@ -45,16 +35,11 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: chart-example.local
-    paths: []
-    # - /
+  - chart-example.local
   tls: {}
   # - secretName: chart-example-tls
   #   hosts:
   #   - chart-example.local
-
-configFiles: {}
-  # config.ini: {}
 
 resources: {}
   # limits:
