@@ -2,5 +2,5 @@ apiVersion: v2
 name: deluge
 description: A helm chart for installing deluge
 type: application
-version: 1.0.2
-appVersion: 1.0.2
+version: 1.0.3
+appVersion: 1.0.3

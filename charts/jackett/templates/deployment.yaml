@@ -32,6 +32,8 @@ spec:
           value: {{ .Values.pgid | quote }}
         - name: TZ
           value: {{ .Values.timezone | quote }}
+        - name: AUTO_UPDATE
+          value: "true"
         resources:
           {{- toYaml .Values.resources | trim | nindent 10 }}
         volumeMounts:

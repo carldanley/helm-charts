@@ -12,7 +12,7 @@ volumes:
   config: {}
     # nfs:
     #   server: 1.1.1.1
-    #   path: /volume1/downloads
+    #   path: /volume1/config
 
 image:
   repository: linuxserver/jackett

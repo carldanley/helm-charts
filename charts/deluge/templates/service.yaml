@@ -9,17 +9,17 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   - name: http
-    port: {{ .Values.service.http.port }}
+    port: {{ .Values.service.ports.http }}
     targetPort: http
   - name: daemon
-    port: {{ .Values.service.daemon.port }}
+    port: {{ .Values.service.ports.daemon }}
     targetPort: daemon
   - name: incoming-tcp
-    port: {{ .Values.service.incomingTCP.port }}
+    port: {{ .Values.service.ports.incomingTCP }}
     targetPort: incoming-tcp
     protocol: TCP
   - name: incoming-udp
-    port: {{ .Values.service.incomingUDP.port }}
+    port: {{ .Values.service.ports.incomingUDP }}
     targetPort: incoming-udp
     protocol: UDP
   selector:

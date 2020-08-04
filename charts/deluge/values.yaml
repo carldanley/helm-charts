@@ -3,77 +3,29 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
-config:
-  maxActiveDownloading: 3
-  maxActiveLimit: 8
-  maxActiveSeeding: 5
-  maxConnectionsGlobal: 200
-  maxConnectionsPerSecond: 20
-  maxConnectionsPerTorrent: -1
-  maxDownloadSpeed: -1.0
-  maxDownloadSpeedPerTorrent: -1
-  maxHalfOpenConnections: 50
-  maxUploadSlotsGlobal: 4
-  maxUploadSlotsPerTorrent: -1
-  maxUploadSpeed: -1.0
-  maxUploadSpeedPerTorrent: -1
-  moveCompleted: false
-  moveCompletedPath: "/root/Downloads"
-  queueNewToTop: false
-  removeSeedAtRatio: false
-  stopSeedAtRatio: false
-  stopSeedRatio: 2.0
-  seedTimeLimit: 180
-  seedTimeRatioLimit: 7.0
-  shareRatioLimit: 2.0
-  shared: false
-  proxy:
-    anonymousMode: false
-    forceProxy: false
-    hostname: ""
-    port: 8080
-    username: ""
-    password: ""
-    proxyHostNames: true
-    proxyPeerConnections: true
-    proxyTrackerConnections: true
-    type: 0
-  sidebar:
-    show: true
+volumes:
+  downloads: {}
+    # nfs:
+    #   server: 1.1.1.1
+    #   path: /volume1/downloads
 
-downloadVolume: {}
-  # nfs:
-  #   server: 1.1.1.1
-  #   path: /volume1/downloads
+  config: {}
+    # nfs:
+    #   server: 1.1.1.1
+    #   path: /volume1/config
 
 image:
   repository: linuxserver/deluge
   pullPolicy: IfNotPresent
-  tag: latest
-
-persistence:
-  enabled: false
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: default
-  size: 10Mi
-  veleroSchedule:
-    enabled: true
-    veleroNamespace: "velero"
-    schedule: "0 */6 * * *"
-    ttl: "168h"
-    includedNamespaces: []
+  tag: 2.0.3-2201906121747ubuntu18.04.1-ls72
 
 service:
   type: ClusterIP
-  http:
-    port: 8112
-  daemon:
-    port: 58846
-  incomingTCP:
-    port: 53160
-  incomingUDP:
-    port: 53160
+  ports:
+    http: 8112
+    daemon: 58846
+    incomingTCP: 53160
+    incomingUDP: 53160
 
 ingress:
   enabled: false
@@ -81,9 +33,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: chart-example.local
-    paths: []
-    # - /
+  - chart-example.local
   tls: {}
   # - secretName: chart-example-tls
   #   hosts:
