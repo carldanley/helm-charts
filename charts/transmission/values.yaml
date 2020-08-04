@@ -1,0 +1,54 @@
+replicaCount: 1
+puid: 0
+pgid: 0
+timezone: America/New_York
+
+downloadVolume: {}
+  # nfs:
+  #   server: 1.1.1.1
+  #   path: /volume1/downloads
+
+image:
+  repository: linuxserver/transmission
+  pullPolicy: IfNotPresent
+  tag: 3.00-r0-ls61
+
+persistence:
+  enabled: false
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  size: 10Mi
+  veleroSchedule:
+    enabled: true
+    veleroNamespace: "velero"
+    schedule: "0 */6 * * *"
+    ttl: "168h"
+    includedNamespaces: []
+
+service:
+  type: ClusterIP
+  ports:
+    http: 9091
+    incomingTCP: 51413
+    incomingUDP: 51413
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+  - chart-example.local
+  tls: {}
+  # - secretName: chart-example-tls
+  #   hosts:
+  #   - chart-example.local
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

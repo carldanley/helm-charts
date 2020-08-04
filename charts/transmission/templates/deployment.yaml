@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "transmission.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "transmission.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "transmission.labels" . | nindent 8 }}
+      annotations:
+        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
+        backup.velero.io/backup-volumes: transmission-config
+        {{- end }}
+    spec:
+      containers:
+      - name: transmission
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8112
+        - name: incoming-tcp
+          containerPort: 51413
+          protocol: TCP
+        - name: incoming-udp
+          containerPort: 51413
+          protocol: UDP
+        env:
+        - name: PUID
+          value: {{ .Values.puid | quote }}
+        - name: PGID
+          value: {{ .Values.pgid | quote }}
+        - name: TZ
+          value: {{ .Values.timezone | quote }}
+        resources:
+          {{- toYaml .Values.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: false
+        - name: transmission-state
+          mountPath: /config/state
+          readOnly: false
+        - name: downloads
+          mountPath: /downloads
+          readOnly: false
+      volumes:
+      - name: downloads
+        {{- if .Values.downloadVolume }}
+{{ toYaml .Values.downloadVolume | indent 8 }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      - name: config
+        emptyDir: {}
+      - name: transmission-state
+        emptyDir: {}
