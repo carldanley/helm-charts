@@ -4,11 +4,11 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "transmission.labels" . | nindent 4 }}
+    {{- include "qbittorrent.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "transmission.selectorLabels" . | nindent 6 }}
+      {{- include "qbittorrent.selectorLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
   strategy:
@@ -16,24 +16,24 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "transmission.labels" . | nindent 8 }}
+        {{- include "qbittorrent.labels" . | nindent 8 }}
       annotations:
         {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule.enabled }}
-        backup.velero.io/backup-volumes: transmission-config
+        backup.velero.io/backup-volumes: qbittorrent-config
         {{- end }}
     spec:
       containers:
-      - name: transmission
+      - name: qbittorrent
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - name: http
-          containerPort: 9091
+          containerPort: 8080
         - name: incoming-tcp
-          containerPort: 51413
+          containerPort: 6881
           protocol: TCP
         - name: incoming-udp
-          containerPort: 51413
+          containerPort: 6881
           protocol: UDP
         env:
         - name: PUID
@@ -48,7 +48,7 @@ spec:
         - name: config
           mountPath: /config
           readOnly: false
-        - name: transmission-state
+        - name: qbittorrent-state
           mountPath: /config/state
           readOnly: false
         - name: downloads
@@ -63,5 +63,5 @@ spec:
         {{- end }}
       - name: config
         emptyDir: {}
-      - name: transmission-state
+      - name: qbittorrent-state
         emptyDir: {}

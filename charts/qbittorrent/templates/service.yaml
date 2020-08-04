@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "transmission.labels" . | nindent 4 }}
+    {{- include "qbittorrent.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -20,4 +20,4 @@ spec:
     targetPort: incoming-udp
     protocol: UDP
   selector:
-    {{- include "transmission.selectorLabels" . | nindent 4 }}
+    {{- include "qbittorrent.selectorLabels" . | nindent 4 }}
