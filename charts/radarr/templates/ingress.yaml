@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $servicePort := .Values.service.http.port -}}
+{{- $servicePort := .Values.service.ports.http -}}
 {{- $releaseName := .Release.Name -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -25,14 +25,12 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.ingress.hosts }}
-  - host: {{ .host | quote }}
+  - host: {{ . | quote }}
     http:
       paths:
-      {{- range .paths }}
-      - path: {{ . }}
+      - path: /
         backend:
           serviceName: {{ $releaseName }}
           servicePort: {{ $servicePort }}
-      {{- end }}
   {{- end }}
 {{- end }}
