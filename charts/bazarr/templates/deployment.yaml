@@ -17,23 +17,7 @@ spec:
     metadata:
       labels:
         {{- include "bazarr.labels" . | nindent 8 }}
-      annotations:
-        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
-        backup.velero.io/backup-volumes: config
-        {{- end }}
     spec:
-      initContainers:
-      - name: copy-config-files
-        image: alpine:latest
-        imagePullPolicy: IfNotPresent
-        command: ["sh", "/init-copy-config-files/copy-config-files.sh"]
-        volumeMounts:
-        - name: init-copy-config-files
-          mountPath: /init-copy-config-files
-        - name: config-files
-          mountPath: /config-files
-        - name: config
-          mountPath: /config
       containers:
       - name: bazarr
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -59,26 +43,21 @@ spec:
           mountPath: /config/config
           readOnly: false
       volumes:
-      # bazarr's config files
-      - name: init-copy-config-files
-        configMap:
-          name: {{ .Release.Name }}-init-copy-config-files
-      - name: config-files
-        configMap:
-          name: {{ .Release.Name }}-config-files
-      - name: config
-        emptyDir: {}
-      # bazarr will look for downloaded tv in this folder
       - name: tv
       {{- if .Values.volumes.tv -}}
         {{ toYaml .Values.volumes.tv | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      # bazarr will look for downloaded movies in this folder
       - name: movies
       {{- if .Values.volumes.movies -}}
         {{ toYaml .Values.volumes.movies | nindent 8 }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: config
+      {{- if .Values.volumes.config -}}
+        {{ toYaml .Values.volumes.config | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
