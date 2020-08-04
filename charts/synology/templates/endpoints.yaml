@@ -1,0 +1,21 @@
+{{- $dot := . -}}
+{{- range $key, $value := .Values.services }}
+{{- if $value.enabled }}
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: "{{ $dot.Release.Name }}-{{ $key }}"
+  namespace: {{ $dot.Release.Namespace }}
+  labels:
+    app: synology
+    service: {{ $key | quote }}
+subsets:
+- addresses:
+  - ip: {{ $dot.Values.synologyIP | quote }}
+  ports:
+  - port: {{ $value.service.port }}
+    name: {{ $key | quote }}
+    protocol: TCP
+{{- end }}
+{{- end }}

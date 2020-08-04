@@ -1,0 +1,20 @@
+{{- $dot := . -}}
+{{- range $key, $value := .Values.services }}
+{{- if $value.enabled }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: "{{ $dot.Release.Name }}-{{ $key }}"
+  namespace: {{ $dot.Release.Namespace }}
+  labels:
+    app: synology
+    service: {{ $key | quote }}
+spec:
+  type: {{ $value.service.type }}
+  ports:
+  - port: {{ $value.service.port }}
+    name: {{ $key | quote }}
+    protocol: TCP
+{{- end }}
+{{- end }}
