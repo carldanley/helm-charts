@@ -5,7 +5,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: "{{ $dot.Release.Name }}-{{ $key }}"
+  name: "{{ lower $dot.Release.Name }}-{{ lower $key }}"
   namespace: {{ $dot.Release.Namespace }}
   labels:
     app: synology
