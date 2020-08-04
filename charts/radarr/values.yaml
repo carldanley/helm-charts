@@ -3,8 +3,6 @@ puid: 0
 pgid: 0
 timezone: America/New_York
 
-scripts: {}
-
 volumes:
   downloads: {}
     # nfs:
@@ -14,31 +12,22 @@ volumes:
   movies: {}
     # nfs:
     #   server: 1.1.1.1
-    #   path: /volume1/downloads
+    #   path: /volume1/movies
+
+  config: {}
+    # nfs:
+    #   server: 1.1.1.1
+    #   path: /volume1/config
 
 image:
   repository: linuxserver/radarr
   pullPolicy: IfNotPresent
-  tag: latest
-
-persistence:
-  enabled: false
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: default
-  size: 100Mi
-  veleroSchedule:
-    enabled: true
-    veleroNamespace: "velero"
-    schedule: "0 */6 * * *"
-    ttl: "168h"
-    includedNamespaces: []
-    # - home-media
+  tag: v0.2.0.1504-ls72
 
 service:
   type: ClusterIP
-  http:
-    port: 7878
+  ports:
+    http: 7878
 
 ingress:
   enabled: false
@@ -46,9 +35,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: chart-example.local
-    paths: []
-    # - /
+  - chart-example.local
   tls: {}
   # - secretName: chart-example-tls
   #   hosts:

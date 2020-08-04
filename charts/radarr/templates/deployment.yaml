@@ -17,23 +17,7 @@ spec:
     metadata:
       labels:
         {{- include "radarr.labels" . | nindent 8 }}
-      annotations:
-        {{- if and .Values.persistence.enabled .Values.persistence.veleroSchedule }}
-        backup.velero.io/backup-volumes: config
-        {{- end }}
     spec:
-      initContainers:
-      - name: copy-scripts
-        image: alpine:latest
-        imagePullPolicy: IfNotPresent
-        command: ["sh", "/init-copy-scripts/copy-files.sh"]
-        volumeMounts:
-        - name: init-copy
-          mountPath: /init-copy-scripts
-        - name: script-files
-          mountPath: /script-files
-        - name: scripts
-          mountPath: /scripts
       containers:
       - name: radarr
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -58,41 +42,22 @@ spec:
         - name: downloads
           mountPath: /downloads
           readOnly: false
-        - name: scripts
-          mountPath: /scripts
-          readOnly: false
       volumes:
-      # any 1-off scripts will be stored here (so they can be available for radarr)
-      - name: init-copy
-        configMap:
-          name: {{ .Release.Name }}-init-copy
-      - name: script-files
-        configMap:
-          name: {{ .Release.Name }}-scripts
-      - name: scripts
-        emptyDir: {}
-      # radarr will look for downloaded movies in this folder
       - name: downloads
       {{- if .Values.volumes.downloads -}}
         {{ toYaml .Values.volumes.downloads | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      # when radarr has detected a movie, it will be moved to this
-      # directory for long-term storage
       - name: movies
       {{- if .Values.volumes.movies -}}
         {{ toYaml .Values.volumes.movies | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      # radarr's config
       - name: config
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ .Release.Name }}
+      {{- if .Values.volumes.config -}}
+        {{ toYaml .Values.volumes.config | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-
-

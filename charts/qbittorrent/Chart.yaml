@@ -1,6 +1,0 @@
-apiVersion: v2
-name: qbittorrent
-description: A helm chart for installing qbittorrent
-type: application
-version: 1.0.1
-appVersion: 1.0.1
