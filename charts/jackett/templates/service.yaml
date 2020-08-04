@@ -9,7 +9,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   - name: http
-    port: {{ .Values.service.http.port }}
+    port: {{ .Values.service.ports.http }}
     targetPort: http
   selector:
     {{- include "jackett.selectorLabels" . | nindent 4 }}
