@@ -18,6 +18,13 @@ drone:
       clientSecret: "replace-me"
     createUser: "username:admin,admin:true"
     userFilter: "admin"
+    resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 
   agent:
     replicaCount: 3
@@ -29,6 +36,13 @@ drone:
       capacity: 1
     debug: false
     dockerSocket: "/var/run/docker.sock"
+    resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 
 podAnnotations: {}
   # backup.velero.io/backup-volumes: data

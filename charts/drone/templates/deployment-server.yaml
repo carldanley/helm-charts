@@ -73,6 +73,8 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/drone
+        resources:
+          {{- toYaml .Values.drone.server.resources | trim | nindent 10 }}
       volumes:
       - name: data
         {{- if .Values.persistence.enabled }}

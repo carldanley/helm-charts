@@ -43,6 +43,8 @@ spec:
         volumeMounts:
         - name: docker-socket
           mountPath: "/var/run/docker.sock"
+        resources:
+          {{- toYaml .Values.drone.agent.resources | trim | nindent 10 }}
       volumes:
       - name: docker-socket
         hostPath:
