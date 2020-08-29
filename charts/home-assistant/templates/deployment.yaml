@@ -54,17 +54,17 @@ spec:
             path: /
             port: http
             scheme: HTTP
-          initialDelaySeconds: 30
-          failureThreshold: 18
-          timeoutSeconds: 10
+          initialDelaySeconds: 0
+          failureThreshold: 12
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /
             port: http
             scheme: HTTP
-          initialDelaySeconds: 30
-          failureThreshold: 18
-          timeoutSeconds: 10
+          initialDelaySeconds: 0
+          failureThreshold: 12
+          timeoutSeconds: 5
         volumeMounts:
         - name: config
           mountPath: /config
