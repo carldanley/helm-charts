@@ -33,6 +33,9 @@ config:
     confidence:
       min: 0.5
       max: 1.0
+  samsung:
+    q60r:
+      host: "127.0.0.1"
 
 
 resources: {}

@@ -20,4 +20,5 @@ MQTT_CLIENT_ID={{ .Values.config.mqtt.clientID | quote }}
 DEEPSTACK_HOST={{ .Values.config.deepstack.host | quote }}
 DEEPSTACK_MIN_CONFIDENCE={{ .Values.config.deepstack.confidence.min | quote }}
 DEEPSTACK_MAX_CONFIDENCE={{ .Values.config.deepstack.confidence.max | quote }}
+SAMSUNG_Q60R_HOST={{ .Values.config.samsung.q60r.host | quote }}
 {{- end }}
