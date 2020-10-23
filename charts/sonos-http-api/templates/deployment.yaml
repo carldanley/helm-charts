@@ -18,6 +18,7 @@ spec:
       labels:
         {{- include "sonosHTTPAPI.labels" . | nindent 8 }}
     spec:
+      hostNetwork: true
       initContainers:
       - name: copy-configs
         image: alpine:latest
