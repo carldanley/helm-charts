@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: chrisns/docker-node-sonos-http-api
+  pullPolicy: IfNotPresent
+  tag: "sha-305e738faa26a7255933c73d5ef3b0c11b4993d9"
+
+service:
+  type: ClusterIP
+  http:
+    port: 5005
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
