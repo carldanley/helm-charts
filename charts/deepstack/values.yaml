@@ -1,5 +1,7 @@
 replicaCount: 1
 
+performanceMode: High
+
 image:
   repository: deepquestai/deepstack
   tag: latest
