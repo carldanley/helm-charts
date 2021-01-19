@@ -22,7 +22,7 @@ volumes:
 image:
   repository: linuxserver/bazarr
   pullPolicy: IfNotPresent
-  tag: 9741aa19-ls33
+  tag: version-v0.9.0.8
 
 service:
   type: ClusterIP
