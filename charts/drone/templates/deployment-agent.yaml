@@ -23,29 +23,16 @@ spec:
         env:
         - name: DRONE_RPC_HOST
           value: {{ .Release.Name }}
-        - name: DRONE_RPC_PORT
+        - name: DRONE_RPC_PROTO
           value: "http"
         - name: DRONE_RPC_SECRET
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}
               key: secret
-        - name: DRONE_RUNNER_CAPACITY
-          value: {{ .Values.drone.agent.runner.capacity | quote }}
-        - name: DRONE_RUNNER_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
         {{- if .Values.drone.agent.debug }}
-        - name: DRONE_DEBUG
+        - name: DRONE_LOGS_DEBUG
           value: "true"
         {{- end }}
-        volumeMounts:
-        - name: docker-socket
-          mountPath: "/var/run/docker.sock"
         resources:
           {{- toYaml .Values.drone.agent.resources | trim | nindent 10 }}
-      volumes:
-      - name: docker-socket
-        hostPath:
-          path: {{ .Values.drone.agent.dockerSocket | quote }}

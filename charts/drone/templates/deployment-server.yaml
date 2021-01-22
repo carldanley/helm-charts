@@ -35,7 +35,7 @@ spec:
         - name: DRONE_SERVER_PROTO
           value: {{ .Values.drone.server.protocol | quote }}
         {{- if .Values.drone.server.debug }}
-        - name: DRONE_DEBUG
+        - name: DRONE_LOGS_DEBUG
           value: "true"
         {{- end }}
         - name: DRONE_DATABASE_DRIVER
@@ -59,6 +59,10 @@ spec:
           value: {{ .Values.drone.server.createUser | quote }}
         - name: DRONE_USER_FILTER
           value: {{ .Values.drone.server.userFilter | quote }}
+        - name: DRONE_REGISTRATION_CLOSED
+          value: "true"
+        - name: DRONE_PROMETHEUS_ANONYMOUS_ACCESS
+          value: "true"
         ports:
         - name: http
           containerPort: {{ .Values.service.http.port }}
