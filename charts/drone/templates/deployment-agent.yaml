@@ -31,8 +31,10 @@ spec:
               name: {{ .Release.Name }}
               key: secret
         {{- if .Values.drone.agent.debug }}
-        - name: DRONE_LOGS_DEBUG
+        - name: DRONE_DEBUG
           value: "true"
         {{- end }}
+        - name: DRONE_NAMESPACE_DEFAULT
+          value: {{ .Release.Namespace }}
         resources:
           {{- toYaml .Values.drone.agent.resources | trim | nindent 10 }}
